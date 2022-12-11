@@ -21,7 +21,6 @@ const Details = ({ route, navigation }) => {
   const category = route?.params?.info;
   const [url, setUrl] = useState("");
   const { loading, setLoading } = useAuth();
-  // console.log(user);
 
   async function takeAndUploadPhotoAsync() {
     let result = await ImagePicker.launchCameraAsync({
@@ -62,7 +61,6 @@ const Details = ({ route, navigation }) => {
           const main = res.data.data.url;
           setLoading(false);
 
-          // console.log(res.data.data.url, "actual url");
           if (main) {
             navigation.navigate("SendToDB", {
               category: category,

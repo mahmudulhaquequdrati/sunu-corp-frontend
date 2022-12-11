@@ -30,7 +30,7 @@ const Nav = () => {
             }}
           />
         </Stack.Group>
-      ) : (
+      ) : user !== null ? (
         <Stack.Group>
           <Stack.Screen
             name="Home"
@@ -53,6 +53,12 @@ const Nav = () => {
             options={{ headerShown: false }}
           />
         </Stack.Group>
+      ) : (
+        <Stack.Screen
+          name="LogIn"
+          component={Login}
+          options={{ headerShown: false }}
+        />
       )}
     </Stack.Navigator>
   );

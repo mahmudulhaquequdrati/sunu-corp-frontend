@@ -50,7 +50,8 @@ const Home = ({ navigation }) => {
           source={require("../../../assets/images/science.jpg")}
         />
       ),
-      name: "Science",
+      name: "Attestation-Speciale",
+      label: "Attestation Speciale",
     },
     {
       id: "2",
@@ -64,7 +65,8 @@ const Home = ({ navigation }) => {
           source={require("../../../assets/images/physics.jpg")}
         />
       ),
-      name: "Physics",
+      name: "Diplôme-du-Bac",
+      label: "Diplôme du Bac",
     },
     {
       id: "3",
@@ -78,7 +80,8 @@ const Home = ({ navigation }) => {
           source={require("../../../assets/images/certificate.jpg")}
         />
       ),
-      name: "Certificate",
+      name: "Duplicata-Diplôme-Bac",
+      label: "Duplicata Diplôme Bac",
     },
     {
       id: "4",
@@ -92,7 +95,8 @@ const Home = ({ navigation }) => {
           source={require("../../../assets/images/library.jpg")}
         />
       ),
-      name: "Library",
+      name: "Relevés-de-Notes",
+      label: "Relevés de Notes",
     },
   ];
   const Item = ({ item }) => {
@@ -116,7 +120,7 @@ const Home = ({ navigation }) => {
             // marginTop: 10,
           }}
         >
-          {item.name}
+          {item?.label}
         </Text>
       </Pressable>
     );
@@ -169,10 +173,10 @@ const Home = ({ navigation }) => {
           style={{
             fontSize: 22,
             fontWeight: "500",
-            color: "#00025F",
+            color: "#065CA8",
           }}
         >
-          Welcome <Text style={{ color: "#065CA8" }}>Mr. Something</Text>
+          Welcome to Sunu Corp
         </Text>
         <Text
           style={{

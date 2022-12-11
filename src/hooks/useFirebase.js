@@ -29,7 +29,6 @@ const useFirebase = () => {
   };
 
   const logOutUser = () => {
-    console.log("log out");
     signOut(auth)
       .then(() => {
         Alert.alert(
@@ -58,7 +57,6 @@ const useFirebase = () => {
     });
   }, [user]);
 
-  // console.log(user);
   return {
     user,
     sigUpUser,

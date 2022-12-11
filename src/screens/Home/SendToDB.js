@@ -25,17 +25,17 @@ const SendToDB = ({ route, navigation }) => {
   const [inputFocus, setInputFocus] = useState(false);
   const [imgLoading2, setImgLoading2] = useState(true);
 
-  const handleFoucs = () => {
-    setInputFocus(true);
-  };
+  // const handleFoucs = () => {
+  //   setInputFocus(true);
+  // };
 
   useEffect(() => {
     axios
       .get(
-        `https://sunu-corp-backend-production.up.railway.app/api/user/${user.email}`
+        `https://sunu-corp-backend-production.up.railway.app/api/user/${user?.email}`
       )
       .then((res) => {
-        setUserInfo(res.data.data);
+        setUserInfo(res.data?.data);
       });
   }, []);
 
@@ -74,8 +74,8 @@ const SendToDB = ({ route, navigation }) => {
             description: description,
             isEmailVerified: user.emailVerified,
             _id: res.data.data._id,
+            date: new Date().toLocaleString(),
           });
-
           Alert.alert(
             "Success",
             "Your document has been sent to the admin. Once it is accepted, you will be notified."

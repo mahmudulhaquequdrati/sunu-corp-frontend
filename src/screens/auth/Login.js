@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import StatusBar from "expo-status-bar/build/ExpoStatusBar";
@@ -16,7 +17,7 @@ import { Feather } from "@expo/vector-icons";
 import useAuth from "../../hooks/useAuth";
 
 const Login = ({ navigation }) => {
-  const { loggedInUser, setUser, setLoading } = useAuth();
+  const { loggedInUser, setUser, setLoading, loading } = useAuth();
   const [onKeyboardShow, setOnKeyboardShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,61 +45,80 @@ const Login = ({ navigation }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         Alert.alert(errorMessage);
+        return;
+        // setUser(null);
       });
   };
 
   return (
     <ScrollView style={styles.container}>
-      <View
-        style={{
-          paddingBottom: onKeyboardShow ? 310 : 0,
-        }}
-      >
-        <Image
-          source={require("../../../assets/images/logo.jpeg")}
-          style={styles.image}
-        />
-        <View>
-          <View style={styles.welcomeWrapper}>
-            <Text style={styles.welcomeText}>Welcome Back</Text>
-            <Text style={styles.signInText}>
-              Sign in with your email and password
-            </Text>
+      {!loading ? (
+        <View
+          style={{
+            paddingBottom: onKeyboardShow ? 310 : 0,
+          }}
+        >
+          <Image
+            source={require("../../../assets/images/logo.jpeg")}
+            style={styles.image}
+          />
+          <View>
+            <View style={styles.welcomeWrapper}>
+              <Text style={styles.welcomeText}>Welcome Back</Text>
+              <Text style={styles.signInText}>
+                Sign in with your email and password
+              </Text>
+            </View>
+            <View style={styles.inputWrapper}>
+              <MaterialIcons name="email" size={24} color="gray" />
+              <TextInput
+                //   onEndEditing={() => setOnKeyboardShow(false)}
+                onFocus={() => setOnKeyboardShow(true)}
+                placeholder="Email"
+                style={styles.textInput}
+                onChangeText={(text) => setEmail(text)}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
+              <Feather name="key" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                onEndEditing={() => setOnKeyboardShow(false)}
+                placeholder="Password"
+                style={styles.textInput}
+                onChangeText={(text) => setPassword(text)}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.loginWrapper}
+              onPress={handleSignIn}
+            >
+              <Text style={styles.loginText}>Login</Text>
+            </TouchableOpacity>
+            {/* create an account */}
+            <View style={styles.createAccountWrapper}>
+              <Text style={styles.createAccountText}>
+                Don't have an account?
+              </Text>
+              <Pressable onPress={() => navigation.navigate("Register")}>
+                <Text style={styles.createAccountLink}>Create an account</Text>
+              </Pressable>
+            </View>
           </View>
-          <View style={styles.inputWrapper}>
-            <MaterialIcons name="email" size={24} color="gray" />
-            <TextInput
-              //   onEndEditing={() => setOnKeyboardShow(false)}
-              onFocus={() => setOnKeyboardShow(true)}
-              placeholder="Email"
-              style={styles.textInput}
-              onChangeText={(text) => setEmail(text)}
-            />
-          </View>
-          <View style={styles.inputWrapper}>
-            <Feather name="key" size={24} color="gray" />
-            <TextInput
-              onFocus={() => setOnKeyboardShow(true)}
-              onEndEditing={() => setOnKeyboardShow(false)}
-              placeholder="Password"
-              style={styles.textInput}
-              onChangeText={(text) => setPassword(text)}
-            />
-          </View>
-          <TouchableOpacity style={styles.loginWrapper} onPress={handleSignIn}>
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity>
-          {/* create an account */}
-          <View style={styles.createAccountWrapper}>
-            <Text style={styles.createAccountText}>Don't have an account?</Text>
-            <Pressable onPress={() => navigation.navigate("Register")}>
-              <Text style={styles.createAccountLink}>Create an account</Text>
-            </Pressable>
-          </View>
-        </View>
 
-        <StatusBar style="auto" />
-      </View>
+          <StatusBar style="auto" />
+        </View>
+      ) : (
+        <ActivityIndicator
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 300,
+          }}
+          size="large"
+        />
+      )}
     </ScrollView>
   );
 };

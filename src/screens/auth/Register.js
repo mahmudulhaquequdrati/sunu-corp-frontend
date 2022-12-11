@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { getAuth, sendEmailVerification } from "firebase/auth";
 import React, { useState } from "react";
@@ -18,6 +19,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import { Octicons } from "@expo/vector-icons";
 
 const Register = ({ navigation }) => {
   const [onKeyboardShow, setOnKeyboardShow] = useState(false);
@@ -25,15 +27,29 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState();
   const [password, setPassword] = useState("");
+  const [dateOfBrith, setDateOfBrith] = useState("");
+  const [placeOfBrith, setPlaceOfBrith] = useState("");
+  const [address, setAddress] = useState("");
+  const [yearOfDegree, setYearOfDegree] = useState("");
+  const [majorOfDegree, setMajorOfDegree] = useState("");
+  const [reasonForRequest, setReasonForRequest] = useState("");
+  const [paymentConfirmation, setPaymentConfirmation] = useState("");
 
-  const { sigUpUser, setUser, setLoading } = useAuth();
+  const { sigUpUser, setUser, setLoading, loading } = useAuth();
   const auth = getAuth();
 
   const handleRegister = async () => {
     const userinfo = {
       name,
-      email,
+      email: email.toLowerCase(),
       phone: parseInt(number),
+      date_of_birth: dateOfBrith,
+      place_of_birth: placeOfBrith,
+      address,
+      year_of_degree: yearOfDegree,
+      major_of_degree: majorOfDegree,
+      reason_for_request: reasonForRequest,
+      payment_confirmation: paymentConfirmation,
     };
 
     // validate the input
@@ -53,6 +69,39 @@ const Register = ({ navigation }) => {
       Alert.alert("Attention required", "Please enter your password");
       return;
     }
+    if (!dateOfBrith) {
+      Alert.alert("Attention required", "Please enter your date of brith");
+      return;
+    }
+
+    if (!placeOfBrith) {
+      Alert.alert("Attention required", "Please enter your place of brith");
+      return;
+    }
+    if (!address) {
+      Alert.alert("Attention required", "Please enter your address");
+      return;
+    }
+    if (!yearOfDegree) {
+      Alert.alert("Attention required", "Please enter your year of degree");
+      return;
+    }
+    if (!majorOfDegree) {
+      Alert.alert("Attention required", "Please enter your major of degree");
+      return;
+    }
+    if (!reasonForRequest) {
+      Alert.alert("Attention required", "Please enter your reason for request");
+      return;
+    }
+    if (!paymentConfirmation) {
+      Alert.alert(
+        "Attention required",
+        "Please enter your payment confirmation"
+      );
+      return;
+    }
+
     if (password.length < 6) {
       Alert.alert(
         "Attention required",
@@ -62,9 +111,12 @@ const Register = ({ navigation }) => {
     }
 
     // call a post method to save the user info to mongodb
-
+    setLoading(true);
     sigUpUser(email, password)
       .then((userCredential) => {
+        /// locahost: https://sunu-corp-backend-production.up.railway.app/
+        //sunu-corp-backend-production.up.railway.app
+        // https:
         axios
           .post(
             "https://sunu-corp-backend-production.up.railway.app/api/user",
@@ -85,7 +137,6 @@ const Register = ({ navigation }) => {
           // Email verification sent!
           // ...
           Alert.alert("Email verification sent!", "please verify your email");
-          // setUser(null);
           setLoading(false);
         });
         // }
@@ -111,7 +162,8 @@ const Register = ({ navigation }) => {
             source={require("../../../assets/images/logo.jpeg")}
             style={styles.image}
           />
-          <View>
+          {/* View */}
+          <ScrollView>
             <View style={styles.welcomeWrapper}>
               <Text style={styles.welcomeText}>Welcome to our app</Text>
               <Text style={styles.signUpText}>
@@ -126,6 +178,30 @@ const Register = ({ navigation }) => {
                 keyboardType="name"
                 placeholder="Name"
                 onChangeText={(text) => setName(text)}
+                style={styles.textInput}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
+              <Octicons name="number" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                // onEndEditing={() => setOnKeyboardShow(false)}
+                keyboardType="numeric" // file type
+                placeholder="Date of birth"
+                onChangeText={(text) => setDateOfBrith(text)}
+                // onChangeText={(text) => setName(text)}
+                style={styles.textInput}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
+              <MaterialIcons name="find-replace" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                // onEndEditing={() => setOnKeyboardShow(false)}
+                keyboardType="default"
+                placeholder="Place of birth"
+                onChangeText={(text) => setPlaceOfBrith(text)}
+                // onChangeText={(text) => setName(text)}
                 style={styles.textInput}
               />
             </View>
@@ -152,6 +228,66 @@ const Register = ({ navigation }) => {
               />
             </View>
             <View style={styles.inputWrapper}>
+              <Entypo name="address" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                // onEndEditing={() => setOnKeyboardShow(false)}
+                keyboardType="default"
+                placeholder="Address"
+                style={styles.textInput}
+                onChangeText={(text) => setAddress(text)}
+                // onChangeText={(text) => setNumber(text)}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
+              <Octicons name="number" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                // onEndEditing={() => setOnKeyboardShow(false)}
+                keyboardType="numeric"
+                placeholder="Year of degree"
+                style={styles.textInput}
+                onChangeText={(text) => setYearOfDegree(text)}
+                // onChangeText={(text) => setNumber(text)}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
+              <AntDesign name="book" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                // onEndEditing={() => setOnKeyboardShow(false)}
+                keyboardType="default"
+                placeholder="Major of degree"
+                style={styles.textInput}
+                onChangeText={(text) => setMajorOfDegree(text)}
+                // onChangeText={(text) => setNumber(text)}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
+              <AntDesign name="unknowfile1" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                // onEndEditing={() => setOnKeyboardShow(false)}
+                keyboardType="default"
+                placeholder="Reason for request"
+                style={styles.textInput}
+                onChangeText={(text) => setReasonForRequest(text)}
+                // onChangeText={(text) => setNumber(text)}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
+              <MaterialIcons name="payments" size={24} color="gray" />
+              <TextInput
+                onFocus={() => setOnKeyboardShow(true)}
+                // onEndEditing={() => setOnKeyboardShow(false)}
+                keyboardType="default"
+                placeholder="Payment confirmation number"
+                style={styles.textInput}
+                onChangeText={(text) => setPaymentConfirmation(text)}
+                // onChangeText={(text) => setNumber(text)}
+              />
+            </View>
+            <View style={styles.inputWrapper}>
               <Feather name="key" size={24} color="gray" />
               <TextInput
                 onFocus={() => setOnKeyboardShow(true)}
@@ -174,7 +310,7 @@ const Register = ({ navigation }) => {
                 <Text style={styles.loginLink}>Login</Text>
               </Pressable>
             </View>
-          </View>
+          </ScrollView>
 
           <StatusBar style={"auto"} />
         </View>
